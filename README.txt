@@ -62,6 +62,9 @@ Options include:
     creating a menu subset. Generally we use subset.pl from Font
     Optimizer for this, however.
 
+  --charfile=: Generate subset for just the specified string which is read
+    from a text file.
+
   --simplify: Make font filesizes much smaller, by stripping out 
     hints, doing curve optimization, and rounding all points to 
     integers. The trade-off is a quality degradation on Windows 
