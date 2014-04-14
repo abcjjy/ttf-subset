@@ -28,6 +28,7 @@ import sys
 import getopt
 import os
 import struct
+import codecs
 
 def log_namelist(nam, unicode):
     if nam and isinstance(unicode, int):
@@ -323,14 +324,19 @@ def main(argv):
     optlist, args = getopt.gnu_getopt(argv, '', ['string=', 'strip_names',
                                                  'simplify', 'new', 'script',
                                                  'nmr', 'roundtrip', 'subset=',
-                                                 'namelist', 'null'])
+                                                 'namelist', 'null', 'charfile='])
 
     font_in, font_out = args
     opts = dict(optlist)
+    subset = ''
     if '--string' in opts:
-        subset = map(ord, opts['--string'])
+        subset = map(ord, set(unicode(opts['--string'], 'utf-8')))
+    elif '--charfile' in opts:
+        with codecs.open(opts['--charfile'], encoding='utf-8') as f:
+            subset = map(ord, set(f.read().strip()))
     else:
         subset = getsubset(opts.get('--subset', 'latin'), font_in)
+    print "++++ The subset size is", len(subset)
     subset_font(font_in, font_out, subset, opts)
 
 if __name__ == '__main__':
